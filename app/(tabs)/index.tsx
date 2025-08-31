@@ -1,75 +1,96 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from "react";
+import { View, TextInput, FlatList, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
+import { Link } from "expo-router";
+import useMovies from "../../hooks/useMovies";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function Home() {
+    const [query, setQuery] = useState("");
+    const { movies, searchMovies, clearMovies } = useMovies();
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+    const placeholder = require("../../assets/placeholder.png");
+
+    const handleClear = () => {
+        setQuery("");
+        clearMovies();
+    };
+
+    return (
+        <View style={{ flex: 1, padding: 16 }}>
+            <View style={styles.searchRow}>
+                <TextInput
+                    placeholder="Search films..."
+                    value={query}
+                    onChangeText={setQuery}
+                    onSubmitEditing={() => searchMovies(query)}
+                    style={styles.input}
+                />
+                {query.length > 0 && (
+                    <TouchableOpacity onPress={handleClear} style={styles.clearButton}>
+                        <Text style={{ fontWeight: "bold" }}>✕</Text>
+                    </TouchableOpacity>
+                )}
+            </View>
+
+            <FlatList
+                data={movies}
+                keyExtractor={(item) => item.imdbID}
+                renderItem={({ item }) => (
+                    <MovieListItem item={item} placeholder={placeholder} />
+                )}
+            />
+        </View>
+    );
 }
 
+type MovieItemProps = {
+    item: {
+        imdbID: string;
+        Poster: string;
+        Title: string;
+    };
+    placeholder: any;
+};
+
+function MovieListItem({ item, placeholder }: MovieItemProps) {
+    const initialSource = item.Poster && item.Poster !== "N/A"
+        ? { uri: item.Poster }
+        : placeholder;
+
+    const [source, setSource] = useState(
+        initialSource
+    );
+
+    return (
+        <Link href={{ pathname: "/details", params: { id: item.imdbID } }} asChild>
+            <TouchableOpacity style={{ flexDirection: "row", marginBottom: 12 }}>
+                <Image
+                    source={source}
+                    style={{ width: 60, height: 90, marginRight: 12, borderRadius: 8 }}
+                    onError={() => setSource(placeholder)}
+                />
+                <Text style={{ fontSize: 16, alignSelf: "center" }}>{item.Title}</Text>
+            </TouchableOpacity>
+        </Link>
+    );
+
+}
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    searchRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 16,
+    },
+    input: {
+        flex: 1,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        padding: 10,
+        borderRadius: 8,
+    },
+    clearButton: {
+        marginLeft: 8,
+        padding: 8,
+        backgroundColor: "#eee",
+        borderRadius: 8,
+    },
 });
