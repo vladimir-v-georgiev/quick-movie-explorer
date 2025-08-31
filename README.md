@@ -1,50 +1,81 @@
-# Welcome to your Expo app 👋
+# Quick Movie Explorer
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A lightweight mobile app built with **React Native + Expo** that lets users quickly search for movies, view details, and save favorites locally.
 
-## Get started
+This project demonstrates **API fetching, navigation, state management, local storage, and polished UI** using TypeScript.
 
-1. Install dependencies
+## 🚀 Features
 
-   ```bash
-   npm install
-   ```
+* **Search Movies:** Search for movies using the [OMDb API](http://www.omdbapi.com/).
+* **Movie Details:** View poster, title, year, rating, plot, and more.
+* **Favorites:** Save favorite movies locally using AsyncStorage.
+* **Placeholder Images:** Automatically fall back to a placeholder if a movie poster is missing or broken.
 
-2. Start the app
+## 🛠 Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+* **React Native + Expo** – Cross-platform mobile development
+* **TypeScript** – Type safety for scalable code
+* **React Navigation** – Stack & tab navigation
+* **AsyncStorage** – Local storage for favorites and watch later
+* **OMDb API** – Public movie database API
+* **StyleSheet / NativeWind** – Clean and responsive UI
 
-In the output, you'll find options to open the app in a
+## 📝 Screens
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+| Screen            | Features                                                         |
+| ----------------- | ---------------------------------------------------------------- |
+| **Home / Search** | Search bar, list of movie posters/titles (`FlatList`), API fetch |
+| **Details**       | Big poster, title, year, rating, plot, “Add to Favorites” button |
+| **Favorites**     | View locally saved movies                                        |
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## ⚡ Optional Enhancements
 
-## Get a fresh project
+* Splash screen using Expo’s SplashScreen API
+* Pull-to-refresh for search results
+* Offline support: favorites load without API
 
-When you're ready, run:
+## 📁 File Structure (Example)
 
-```bash
-npm run reset-project
+```
+app/
+├─ (tabs)/
+│  ├─ index.tsx         # Home screen
+├─ details.tsx          # Movie details screen
+├─ favourites.tsx       # Favorites screen
+assets/
+├─ placeholder.png      # Default poster image
+components/
+├─ MovieListItem.tsx    # Reusable list item component
+├─ ToggleListButton.tsx # Button for favourites/watch later
+hooks/
+├─ useMovies.ts         # Custom hook for searching movies
+utils/
+├─ storage.ts           # AsyncStorage helpers
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 💻 Installation & Running
 
-## Learn more
+```bash
+# Clone the repo
+git clone <repo-url>
+cd quick-movie-explorer
 
-To learn more about developing your project with Expo, look at the following resources:
+# Install dependencies
+npm install
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+# Run the app in Expo Go
+npx expo start
+```
 
-## Join the community
+## 📌 Notes
 
-Join our community of developers creating universal apps.
+* Make sure to get a free **OMDb API key**: [http://www.omdbapi.com/apikey.aspx](http://www.omdbapi.com/apikey.aspx)
+* Placeholder image is used whenever a movie poster is missing or cannot be loaded
+* All UI components are mobile-friendly, optimized for touch and performance
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## ✅ Highlights
+
+* **Fast iteration with Expo** – no native setup headaches
+* **Type-safe code with TypeScript** – fewer runtime errors
+* **Reusable components** – easy to scale
+* **Mobile-native thinking** – optimized lists, touch targets, and layouts
